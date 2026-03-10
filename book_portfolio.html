@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — A Collection</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Lacquer&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'EB Garamond', 'Crimson Text', serif;
+            background: #fff5f7;
+            color: #8b1538;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .book-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            min-height: 100vh;
+        }
+        
+        /* Cover Page */
+        .cover-page {
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe8ed 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            padding: 60px;
+            padding-left: 15%;
+        }
+        
+        .cover-content {
+            text-align: left;
+            max-width: 500px;
+        }
+        
+        .jumbled-text {
+            font-size: 2em;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            line-height: 1.6;
+            cursor: default;
+            color: #8b1538;
+            font-family: 'Lacquer', cursive;
+            text-transform: none;
+            word-spacing: 2em;
+        }
+        
+        .jumbled-text .char {
+            display: inline-block;
+            transition: transform 3s ease-in-out;
+            will-change: transform;
+        }
+        
+        .jumbled-text .space {
+            display: inline-block;
+            width: 2em;
+        }
+        
+        .jumbled-text.jumbled .char:nth-child(1) { transform: translate(-120px, 60px) rotate(-35deg); }
+        .jumbled-text.jumbled .char:nth-child(2) { transform: translate(90px, -100px) rotate(45deg); }
+        .jumbled-text.jumbled .char:nth-child(3) { transform: translate(-70px, 110px) rotate(-50deg); }
+        .jumbled-text.jumbled .char:nth-child(4) { transform: translate(130px, 50px) rotate(30deg); }
+        .jumbled-text.jumbled .char:nth-child(5) { transform: translate(-100px, -90px) rotate(-40deg); }
+        .jumbled-text.jumbled .char:nth-child(6) { transform: translate(60px, 105px) rotate(55deg); }
+        .jumbled-text.jumbled .char:nth-child(7) { transform: translate(-140px, -50px) rotate(-45deg); }
+        .jumbled-text.jumbled .char:nth-child(8) { transform: translate(100px, -110px) rotate(35deg); }
+        .jumbled-text.jumbled .char:nth-child(9) { transform: translate(-80px, 90px) rotate(-30deg); }
+        .jumbled-text.jumbled .char:nth-child(10) { transform: translate(120px, -65px) rotate(40deg); }
+        .jumbled-text.jumbled .char:nth-child(11) { transform: translate(-130px, 100px) rotate(-52deg); }
+        .jumbled-text.jumbled .char:nth-child(12) { transform: translate(80px, -95px) rotate(48deg); }
+        .jumbled-text.jumbled .char:nth-child(13) { transform: translate(-110px, 70px) rotate(-38deg); }
+        .jumbled-text.jumbled .char:nth-child(14) { transform: translate(135px, -75px) rotate(32deg); }
+        .jumbled-text.jumbled .char:nth-child(15) { transform: translate(-65px, 115px) rotate(-43deg); }
+        .jumbled-text.jumbled .char:nth-child(16) { transform: translate(95px, 45px) rotate(58deg); }
+        .jumbled-text.jumbled .char:nth-child(17) { transform: translate(-125px, -100px) rotate(-47deg); }
+        .jumbled-text.jumbled .char:nth-child(18) { transform: translate(145px, 95px) rotate(37deg); }
+        .jumbled-text.jumbled .char:nth-child(19) { transform: translate(-75px, -105px) rotate(-34deg); }
+        .jumbled-text.jumbled .char:nth-child(20) { transform: translate(70px, 120px) rotate(42deg); }
+        .jumbled-text.jumbled .char:nth-child(21) { transform: translate(-95px, 65px) rotate(-39deg); }
+        .jumbled-text.jumbled .char:nth-child(22) { transform: translate(110px, -70px) rotate(44deg); }
+        .jumbled-text.jumbled .char:nth-child(23) { transform: translate(-135px, 85px) rotate(-36deg); }
+        .jumbled-text.jumbled .char:nth-child(24) { transform: translate(115px, -115px) rotate(51deg); }
+        .jumbled-text.jumbled .char:nth-child(25) { transform: translate(-105px, 125px) rotate(-41deg); }
+        .jumbled-text.jumbled .char:nth-child(26) { transform: translate(85px, 35px) rotate(46deg); }
+        .jumbled-text.jumbled .char:nth-child(27) { transform: translate(-70px, -110px) rotate(-49deg); }
+        
+        .jumbled-text:not(.jumbled) .char {
+            transform: translate(0, 0) rotate(0deg);
+        }
+        
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.1em;
+            font-style: italic;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+            color: #8b1538;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        /* Table of Contents Page */
+        .page {
+            background: #fff5f7;
+            padding: 80px 60px;
+            position: relative;
+            display: none;
+        }
+        
+        .page.active {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 60px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .left-sidebar {
+            border-right: 2px solid #8b1538;
+            padding-right: 40px;
+        }
+        
+        .sidebar-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .toc-entry {
+            display: block;
+            text-decoration: none;
+            color: #8b1538;
+            padding: 12px 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(139, 21, 56, 0.2);
+            font-size: 1.1em;
+        }
+        
+        .toc-entry:hover {
+            padding-left: 15px;
+            color: #b51d47;
+        }
+        
+        .toc-section {
+            margin-bottom: 40px;
+        }
+        
+        .main-content {
+            padding-left: 40px;
+        }
+        
+        .content-header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #8b1538;
+            padding-bottom: 20px;
+        }
+        
+        .content-title {
+            font-size: 2.8em;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        
+        .content-subtitle {
+            font-size: 1.3em;
+            font-style: italic;
+            color: #b51d47;
+            margin-top: 10px;
+        }
+        
+        .content-body {
+            font-size: 1.15em;
+            line-height: 1.8;
+        }
+        
+        .content-body h2 {
+            font-size: 1.8em;
+            margin: 35px 0 20px 0;
+            font-weight: 600;
+        }
+        
+        .content-body h3 {
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+        
+        .content-body p {
+            margin-bottom: 20px;
+        }
+        
+        .content-body ul, .content-body ol {
+            margin: 20px 0 20px 30px;
+        }
+        
+        .content-body li {
+            margin-bottom: 10px;
+        }
+        
+        .content-body em {
+            color: #b51d47;
+        }
+        
+        .page-number {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            font-style: italic;
+            color: #b51d47;
+            font-size: 0.95em;
+        }
+        
+        .ornament {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.5em;
+            color: #b51d47;
+        }
+        
+        @media (max-width: 968px) {
+            .page.active {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .left-sidebar {
+                border-right: none;
+                border-bottom: 2px solid #8b1538;
+                padding-right: 0;
+                padding-bottom: 30px;
+            }
+            
+            .main-content {
+                padding-left: 0;
+            }
+            
+            .jumbled-text {
+                font-size: 1.6em;
+            }
+            
+            .cover-page {
+                padding-left: 10%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .book-container {
+                padding: 30px 20px;
+            }
+            
+            .page {
+                padding: 40px 30px;
+            }
+            
+            .cover-page {
+                padding: 40px 20px;
+                padding-left: 20px;
+            }
+            
+            .jumbled-text {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cover Page -->
+    <div class="cover-page" id="cover">
+        <div class="cover-content">
+            <div class="jumbled-text jumbled" id="jumbledText"></div>
+        </div>
+        <div class="scroll-hint">scroll or hover to begin →</div>
+    </div>
+
+    <!-- Main Content with TOC -->
+    <div class="book-container">
+        <div class="page" id="main-page">
+            <!-- Left Sidebar - Table of Contents -->
+            <div class="left-sidebar">
+                <div class="toc-section">
+                    <h2 class="sidebar-title">Contents</h2>
+                    
+                    <a href="#about" class="toc-entry" onclick="loadContent('about'); return false;">
+                        About
+                    </a>
+                    
+                    <a href="#work" class="toc-entry" onclick="loadContent('work'); return false;">
+                        Selected Works
+                    </a>
+                    
+                    <a href="#projects" class="toc-entry" onclick="loadContent('projects'); return false;">
+                        Projects & Experiments
+                    </a>
+                    
+                    <a href="#writing" class="toc-entry" onclick="loadContent('writing'); return false;">
+                        Writings
+                    </a>
+                    
+                    <a href="#skills" class="toc-entry" onclick="loadContent('skills'); return false;">
+                        Skills & Expertise
+                    </a>
+                </div>
+                
+                <div class="ornament">✦ ✦ ✦</div>
+                
+                <div class="toc-section">
+                    <h2 class="sidebar-title">Appendices</h2>
+                    
+                    <a href="#contact" class="toc-entry" onclick="loadContent('contact'); return false;">
+                        Contact
+                    </a>
+                    
+                    <a href="#notes" class="toc-entry" onclick="loadContent('notes'); return false;">
+                        Notes & Acknowledgments
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="main-content" id="content-area">
+                <div class="content-header">
+                    <h1 class="content-title">Welcome</h1>
+                    <p class="content-subtitle">A Portfolio of Work & Ideas</p>
+                </div>
+                <div class="content-body">
+                    <p>A curated collection of projects, writings, and explorations in design, code, and creative thought.</p>
+                    
+                    <p>Select any item from the table of contents on the left to begin exploring.</p>
+                    
+                    <div class="ornament">✦ ✦ ✦</div>
+                    
+                    <p style="font-style: italic; text-align: center; margin-top: 40px;">let's figure it out together.</p>
+                </div>
+                <div class="page-number">i</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Jumbled text effect - lowercase text
+        const text = "let's figure it out together";
+        const jumbledTextEl = document.getElementById('jumbledText');
+        
+        // Create characters
+        text.split('').forEach((char, i) => {
+            const span = document.createElement('span');
+            if (char === ' ') {
+                span.className = 'space';
+            } else {
+                span.className = 'char';
+            }
+            span.textContent = char;
+            jumbledTextEl.appendChild(span);
+        });
+        
+        // Unjumble on scroll or hover
+        let hasUnjumbled = false;
+        let isAnimating = false;
+        let animationComplete = false;
+        let animationTimeout = null;
+        
+        function unjumble() {
+            if (!hasUnjumbled) {
+                jumbledTextEl.classList.remove('jumbled');
+                hasUnjumbled = true;
+                isAnimating = true;
+                
+                // Mark animation as complete after 3 seconds
+                setTimeout(() => {
+                    isAnimating = false;
+                    animationComplete = true;
+                }, 3000);
+                
+                // Auto-open after 3 seconds animation + 20 seconds wait = 23 seconds total
+                animationTimeout = setTimeout(() => {
+                    openBook();
+                }, 23000);
+            }
+        }
+        
+        function openBook() {
+            if (animationTimeout) {
+                clearTimeout(animationTimeout);
+            }
+            isAnimating = false;
+            animationComplete = false;
+            document.getElementById('cover').style.transition = 'opacity 0.5s ease';
+            document.getElementById('cover').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('cover').style.display = 'none';
+                document.getElementById('main-page').classList.add('active');
+                window.scrollTo({ top: 0 });
+            }, 500);
+        }
+        
+        // Skip animation on click or scroll ONLY after animation completes
+        document.addEventListener('click', () => {
+            if (animationComplete) {
+                openBook();
+            }
+        });
+        
+        jumbledTextEl.addEventListener('mouseenter', unjumble);
+        
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (!hasUnjumbled && window.scrollY > 50) {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(unjumble, 100);
+            } else if (animationComplete) {
+                openBook();
+            }
+        });
+        
+        // Content loading
+        const contentData = {
+            about: {
+                title: 'About',
+                subtitle: 'Background & Philosophy',
+                page: 'i',
+                content: `
+                    <p>I am a [your profession] based in [your location], working at the intersection of [your interests].</p>
+                    
+                    <p>My work explores [your focus areas], with a particular interest in [specific topics]. Through [your medium/approach], I seek to [your mission or goal].</p>
+                    
+                    <h3>Background</h3>
+                    <p>I studied [your education] at [institution] and have since worked with [types of clients/companies]. My practice encompasses [your areas of work].</p>
+                    
+                    <h3>Philosophy</h3>
+                    <p>[Your approach to work, what drives you, your values and principles.]</p>
+                `
+            },
+            work: {
+                title: 'Selected Works',
+                subtitle: 'Featured Projects',
+                page: '1',
+                content: `
+                    <h2>Project One</h2>
+                    <p><em>Role: [Your Role] • Year: [Year]</em></p>
+                    <p>[Description of the project, your contribution, and outcomes.]</p>
+                    
+                    <h2>Project Two</h2>
+                    <p><em>Role: [Your Role] • Year: [Year]</em></p>
+                    <p>[Description of the project, your contribution, and outcomes.]</p>
+                    
+                    <h2>Project Three</h2>
+                    <p><em>Role: [Your Role] • Year: [Year]</em></p>
+                    <p>[Description of the project, your contribution, and outcomes.]</p>
+                `
+            },
+            projects: {
+                title: 'Projects & Experiments',
+                subtitle: 'Ongoing Explorations',
+                page: '23',
+                content: `
+                    <p>A collection of ongoing explorations and experimental work.</p>
+                    
+                    <h3>[Project Name]</h3>
+                    <p>[Brief description of your experimental or side project.]</p>
+                    
+                    <h3>[Project Name]</h3>
+                    <p>[Brief description of your experimental or side project.]</p>
+                    
+                    <h3>[Project Name]</h3>
+                    <p>[Brief description of your experimental or side project.]</p>
+                `
+            },
+            writing: {
+                title: 'Writings',
+                subtitle: 'Essays & Articles',
+                page: '47',
+                content: `
+                    <h3>[Article Title]</h3>
+                    <p><em>[Date] • [Publication if applicable]</em></p>
+                    <p>[Brief excerpt or description of the article.]</p>
+                    
+                    <h3>[Article Title]</h3>
+                    <p><em>[Date] • [Publication if applicable]</em></p>
+                    <p>[Brief excerpt or description of the article.]</p>
+                    
+                    <h3>[Article Title]</h3>
+                    <p><em>[Date] • [Publication if applicable]</em></p>
+                    <p>[Brief excerpt or description of the article.]</p>
+                `
+            },
+            skills: {
+                title: 'Skills & Expertise',
+                subtitle: 'Capabilities',
+                page: '68',
+                content: `
+                    <h3>Technical Skills</h3>
+                    <p>[List your technical skills and proficiencies]</p>
+                    
+                    <h3>Tools & Technologies</h3>
+                    <p>[Software, platforms, and tools you work with]</p>
+                    
+                    <h3>Languages</h3>
+                    <p>[Programming languages, spoken languages, etc.]</p>
+                    
+                    <h3>Methodologies</h3>
+                    <p>[Your approach to work, frameworks you use]</p>
+                `
+            },
+            contact: {
+                title: 'Contact',
+                subtitle: 'Get in Touch',
+                page: '89',
+                content: `
+                    <p>I'm always interested in hearing about new projects and opportunities.</p>
+                    
+                    <p><strong>Email:</strong> your.email@example.com</p>
+                    <p><strong>Location:</strong> [Your City, Country]</p>
+                    <p><strong>Website:</strong> yourwebsite.com</p>
+                    
+                    <p style="margin-top: 30px;"><strong>Connect:</strong></p>
+                    <p>LinkedIn • Twitter • GitHub • Instagram</p>
+                `
+            },
+            notes: {
+                title: 'Notes & Acknowledgments',
+                subtitle: 'Credits',
+                page: '92',
+                content: `
+                    <p>This portfolio was created with inspiration from classic book design and the rich tradition of printed matter.</p>
+                    
+                    <p>Special thanks to [mentors, collaborators, or inspirations].</p>
+                    
+                    <p><em>Last updated: [Date]</em></p>
+                `
+            }
+        };
+        
+        function loadContent(section) {
+            const data = contentData[section];
+            const contentArea = document.getElementById('content-area');
+            
+            contentArea.innerHTML = `
+                <div class="content-header">
+                    <h1 class="content-title">${data.title}</h1>
+                    <p class="content-subtitle">${data.subtitle}</p>
+                </div>
+                <div class="content-body">
+                    ${data.content}
+                </div>
+                <div class="page-number">${data.page}</div>
+            `;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+/* Container for the ornament */
+.ornament {
+  display: flex;          /* Allows icons to sit side-by-side */
+  justify-content: center; /* Centers icons horizontally */
+  align-items: center;     /* Centers icons vertically */
+  gap: 12px;              /* Space between the icons */
+  margin: 40px 0;         /* Space above and below the whole ornament row */
+}
+
+/* Individual ornament styling */
+.ornament img {
+  width: 60px;            /* Your 10x smaller size */
+  height: auto;           /* Keeps it from looking squished */
+  
+  /* Helps keep small PNGs sharp */
+  image-rendering: -webkit-optimize-contrast; 
+  image-rendering: crisp-edges;
+  
+  /* Optional: gives it a subtle look */
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+/* Optional: icons light up when you hover over the section */
+.ornament:hover img {
+  opacity: 1;
+}

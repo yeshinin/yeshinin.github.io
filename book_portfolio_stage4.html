@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — A Collection</title>
+    <link rel="stylesheet" href="ornament.css">
+    <link rel="stylesheet" href="figmastyle.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Lacquer&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap');
+
+        /* Very light linen / paper */
+        :root{
+        --linen-bg: #f8f6f1;
+        --linen-bg-soft: #f4f1ea;
+        }
+
+        body::before{
+        content:"";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 1;
+        }
+                /* Lock scrolling while cover is visible */
+        body.cover-locked {
+        overflow: hidden;
+        height: 100vh;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lexend', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            background: var(--linen-bg); /* linen */
+            color: #8b1538;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+
+        .book-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            min-height: 100vh;
+        }
+        
+        /* Big margin masthead (AB/GD style) */
+        .masthead{
+        margin: 0 0 14px 0;   /* <-- remove the -10px */
+        line-height: 0.9;
+        }
+
+        .masthead-name{
+        font-family: 'EB Garamond', 'Crimson Text', serif;
+        font-weight: 700;
+        font-size: 4.2em;
+        letter-spacing: 0.01em;
+        color: #8b1538;
+        }
+
+        @media (max-width: 968px){
+        .masthead-name{ font-size: 3.2em; }
+        }
+        @media (max-width: 768px){
+        .masthead-name{ font-size: 2.6em; }
+        }
+
+        .masthead-slash{
+        font-family: 'Crimson Text', 'EB Garamond', serif;
+        font-weight: 600;
+        font-size: 3.2em;
+        line-height: 1;
+        color: #8b1538;
+        opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px){
+        .masthead-name, .masthead-slash{
+            font-size: 2.4em;
+        }
+        .masthead{ margin-bottom: 18px; }
+        }
+
+        /* Welcome intro in Lexend (Bill Gates–style clean text) */
+        .welcome-intro{
+        font-family: inherit;   /* now Lexend */
+        font-size: 1.18em;
+        line-height: 1.85;
+        letter-spacing: 0.005em;
+        max-width: 62ch;
+        }
+
+        .welcome-intro strong{
+        font-weight: 600;
+        }
+
+        /* Cover Page */
+        .cover-page {
+            background: linear-gradient(
+                135deg,
+                var(--linen-bg) 0%,
+                var(--linen-bg-soft) 100%
+            );
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            z-index: 9990;
+            padding: 60px;
+            padding-left: 15%;
+        }
+        
+        .cover-content {
+            text-align: left;
+            max-width: 500px;
+        }
+        
+        .jumbled-text {
+            font-size: 2em;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            line-height: 1.6;
+            cursor: default;
+            color: #0a822a;
+            font-family: 'Lacquer', cursive;
+            text-transform: none;
+            word-spacing: 2em;
+        }
+        
+        .jumbled-text .char {
+            display: inline-block;
+            transition: transform 3s ease-in-out;
+            will-change: transform;
+        }
+        
+        .jumbled-text .space {
+            display: inline-block;
+            width: 2em;
+        }
+        
+        .jumbled-text.jumbled .char:nth-child(1) { transform: translate(-120px, 60px) rotate(-35deg); }
+        .jumbled-text.jumbled .char:nth-child(2) { transform: translate(90px, -100px) rotate(45deg); }
+        .jumbled-text.jumbled .char:nth-child(3) { transform: translate(-70px, 110px) rotate(-50deg); }
+        .jumbled-text.jumbled .char:nth-child(4) { transform: translate(130px, 50px) rotate(30deg); }
+        .jumbled-text.jumbled .char:nth-child(5) { transform: translate(-100px, -90px) rotate(-40deg); }
+        .jumbled-text.jumbled .char:nth-child(6) { transform: translate(60px, 105px) rotate(55deg); }
+        .jumbled-text.jumbled .char:nth-child(7) { transform: translate(-140px, -50px) rotate(-45deg); }
+        .jumbled-text.jumbled .char:nth-child(8) { transform: translate(100px, -110px) rotate(35deg); }
+        .jumbled-text.jumbled .char:nth-child(9) { transform: translate(-80px, 90px) rotate(-30deg); }
+        .jumbled-text.jumbled .char:nth-child(10) { transform: translate(120px, -65px) rotate(40deg); }
+        .jumbled-text.jumbled .char:nth-child(11) { transform: translate(-130px, 100px) rotate(-52deg); }
+        .jumbled-text.jumbled .char:nth-child(12) { transform: translate(80px, -95px) rotate(48deg); }
+        .jumbled-text.jumbled .char:nth-child(13) { transform: translate(-110px, 70px) rotate(-38deg); }
+        .jumbled-text.jumbled .char:nth-child(14) { transform: translate(135px, -75px) rotate(32deg); }
+        .jumbled-text.jumbled .char:nth-child(15) { transform: translate(-65px, 115px) rotate(-43deg); }
+        .jumbled-text.jumbled .char:nth-child(16) { transform: translate(95px, 45px) rotate(58deg); }
+        .jumbled-text.jumbled .char:nth-child(17) { transform: translate(-125px, -100px) rotate(-47deg); }
+        .jumbled-text.jumbled .char:nth-child(18) { transform: translate(145px, 95px) rotate(37deg); }
+        .jumbled-text.jumbled .char:nth-child(19) { transform: translate(-75px, -105px) rotate(-34deg); }
+        .jumbled-text.jumbled .char:nth-child(20) { transform: translate(70px, 120px) rotate(42deg); }
+        .jumbled-text.jumbled .char:nth-child(21) { transform: translate(-95px, 65px) rotate(-39deg); }
+        .jumbled-text.jumbled .char:nth-child(22) { transform: translate(110px, -70px) rotate(44deg); }
+        .jumbled-text.jumbled .char:nth-child(23) { transform: translate(-135px, 85px) rotate(-36deg); }
+        .jumbled-text.jumbled .char:nth-child(24) { transform: translate(115px, -115px) rotate(51deg); }
+        .jumbled-text.jumbled .char:nth-child(25) { transform: translate(-105px, 125px) rotate(-41deg); }
+        .jumbled-text.jumbled .char:nth-child(26) { transform: translate(85px, 35px) rotate(46deg); }
+        .jumbled-text.jumbled .char:nth-child(27) { transform: translate(-70px, -110px) rotate(-49deg); }
+        
+        .jumbled-text:not(.jumbled) .char {
+            transform: translate(0, 0) rotate(0deg);
+        }
+        
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.1em;
+            font-style: italic;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+            color: #0a822a;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        /* Table of Contents Page */
+        .page {
+            background: var(--linen-bg);
+            padding: 80px 60px;
+            position: relative;
+            display: none;
+        }
+        
+        .page.active {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            grid-template-rows: auto 1fr;   /* NEW: masthead row + content row */
+            gap: 60px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .top-masthead{
+            padding-bottom: 14px;
+            grid-column: 1 / -1;  /* span BOTH columns */
+            grid-row: 1;
+            margin-bottom: -10px; /* optional: pull columns slightly closer */
+        }
+
+        .top-masthead .masthead-name{
+        font-family: 'Special Gothic Expanded One', system-ui, sans-serif;
+        font-weight: 400;          /* this font only has one weight */
+        font-size: 4.2em;
+        letter-spacing: 0.01em;
+        color: #8b1538;
+        }
+        .top-masthead .masthead-slash{
+        font-family: 'Special Gothic Expanded One', system-ui, sans-serif;
+        font-weight: 400;
+        font-size: 3.2em;
+        line-height: 1;
+        color: #8b1538;
+        opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px){
+        .top-masthead .masthead-name{ font-size: 3.2em; }
+        .top-masthead .masthead-slash{ font-size: 2.6em; }
+        }
+        @media (max-width: 768px){
+        .top-masthead .masthead-name{ font-size: 2.6em; }
+        .top-masthead .masthead-slash{ font-size: 2.2em; }
+        }
+
+        .left-sidebar {
+            border-right: 2px solid #8b1538;
+            padding-right: 40px;
+        }
+        
+        .sidebar-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .toc-entry {
+            display: block;
+            text-decoration: none;
+            color: #8b1538;
+            padding: 12px 0;
+            transition: all 0.3s ease;
+           /* border-bottom: 1px solid rgba(139, 21, 56, 0.2);*/
+            font-size: 1.1em;
+        }
+        
+        .toc-entry:hover {
+            padding-left: 15px;
+            color: #0a822a;
+        }
+        
+        .toc-section {
+            margin-bottom: 40px;
+        }
+        
+        .main-content {
+            padding-left: 40px;
+        }
+        
+        .content-header {
+            margin-bottom: 40px;
+            /*border-bottom: 2px solid #8b1538;*/
+            padding-bottom: 20px;
+        }
+        
+        .content-title {
+            font-size: 2.8em;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        
+        .content-subtitle {
+            font-size: 1.3em;
+            font-style: italic;
+            color: #8b1538;
+            margin-top: 10px;
+        }
+        
+        .content-body {
+            font-size: 1.15em;
+            line-height: 1.8;
+        }
+        
+        .content-body h2 {
+            font-size: 1.8em;
+            margin: 35px 0 20px 0;
+            font-weight: 600;
+        }
+        
+        .content-body h3 {
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+        
+        .content-body p {
+            margin-bottom: 20px;
+        }
+        
+        .content-body ul, .content-body ol {
+            margin: 20px 0 20px 30px;
+        }
+        
+        .content-body li {
+            margin-bottom: 10px;
+        }
+        
+        .content-body em {
+            color: #8b1538;
+        }
+        
+        .page-number {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            font-style: italic;
+            color: #8b1538;
+            font-size: 0.95em;
+        }
+               
+        @media (max-width: 968px) {
+            .page.active {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .left-sidebar {
+                border-right: none;
+                border-bottom: 2px solid #8b1538;
+                padding-right: 0;
+                padding-bottom: 30px;
+            }
+            
+            .main-content {
+                padding-left: 0;
+            }
+            
+            .jumbled-text {
+                font-size: 1.6em;
+            }
+            
+            .cover-page {
+                padding-left: 10%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .book-container {
+                padding: 30px 20px;
+            }
+            
+            .page {
+                padding: 40px 30px;
+            }
+            
+            .cover-page {
+                padding: 40px 20px;
+                padding-left: 20px;
+            }
+            
+            .jumbled-text {
+                font-size: 1.4em;
+            }
+        }
+
+        /* ===============================
+        Corner Critter (main page only)
+        =============================== */
+
+        /* Rustic doodle styles */
+        .rustic-doodle{
+        width: 56px;
+        height: 56px;
+        display:block;
+        filter: drop-shadow(0 12px 18px rgba(0,0,0,.10));
+        }
+
+        .doodle-blob{
+        fill: rgba(255,255,255,.65);
+        stroke: rgba(139, 21, 56, 0.16);
+        stroke-width: 1.2;
+        }
+
+        .doodle-line{
+        fill: none;
+        stroke: #0a822a;            /* matches your deep red text */
+        stroke-width: 3.0;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+
+        /* this enables the "draw as you scroll" effect */
+        stroke-dasharray: 260;
+        stroke-dashoffset: 260;
+        }
+
+        .doodle-stitch{
+        fill: none;
+        stroke: rgba(10,130,42,.75); /* your green accent */
+        stroke-width: 2.2;
+        stroke-linecap: round;
+        stroke-dasharray: 18;
+        stroke-dashoffset: 0;
+        opacity: .9;
+        }
+
+        .corner-critter{
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 9999;
+        pointer-events: none;
+        user-select: none;
+        transform: translate3d(0,0,0);
+        opacity: 0; /* becomes visible when book opens */
+        transition: opacity .25s ease;
+        }
+
+        .critter-bubble{
+        width: 74px;
+        height: 74px;
+        border-radius: 22px;
+        display: grid;
+        place-items: center;
+        font-size: 34px;
+        background: rgba(255,255,255,.72);
+        border: 1px solid rgba(139, 21, 56, 0.18);
+        box-shadow: 0 14px 30px rgba(0,0,0,.10);
+        backdrop-filter: blur(6px);
+        }
+
+        .critter-tag{
+        margin-top: 4px;
+        text-align: center;
+        font-family: 'Lacquer', cursive;
+        font-size: 13px;
+        letter-spacing: .03em;
+        line-height: 1.1;     /* tighter multiline */
+        color: #0a822a;
+        opacity: .85;
+        width: 56px;          /* match your smaller doodle width */
+        margin-left: auto;
+        margin-right: auto;
+        }
+
+        @media (prefers-reduced-motion: reduce){
+        .corner-critter{ display:none; }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Cover Page -->
+    <div class="cover-page" id="cover">
+        <div class="cover-content">
+            <div class="jumbled-text jumbled" id="jumbledText"></div>
+        </div>
+        <div class="scroll-hint">Hover over to begin →</div>
+    </div>
+
+    <!-- Main Content with TOC -->
+    <div class="book-container">
+        <div class="page" id="main-page">
+            <!-- Funky corner critter (main page only) -->
+          <!--  <div class="corner-critter" id="cornerCritter" aria-hidden="true">
+            <div class="critter-bubble">🐸</div>
+            <div class="critter-tag">turning pages</div>
+            </div>-->
+            <!-- Rustic line doodle (main page only) -->
+            <div class="corner-critter" id="cornerCritter" aria-hidden="true">
+                
+
+            <svg class="rustic-doodle" viewBox="0 0 120 120" role="presentation">
+                <!-- a paper-ish blob background -->
+                <!--<path class="doodle-blob"
+                d="M18,33 C20,18 36,10 52,12 C70,14 84,9 95,24 C106,38 110,55 104,71
+                    C98,87 84,104 64,106 C44,108 18,98 13,78 C8,59 16,47 18,33 Z" />-->
+
+                <!-- rustic swirl line -->
+                <!--<path class="doodle-line"
+                d="M28,70
+                    C26,54 40,40 57,42
+                    C75,44 82,60 71,71
+                    C60,83 40,80 42,63
+                    C44,48 67,48 72,58
+                    C78,70 63,82 48,78
+                    C34,74 33,58 45,52" />-->
+
+                <!-- Head (scribbly circle) -->
+                <path class="doodle-line"
+                    d="M62,26
+                    C54,24 47,30 48,38
+                    C49,48 61,52 69,45
+                    C77,38 72,27 62,26 Z" />
+
+                <!-- Body / torso -->
+                <path class="doodle-line"
+                    d="M58,52
+                    C58,60 58,67 58,75
+                    C58,83 57,90 56,96" />
+
+                <!-- Arms (slightly wiggly) -->
+                <path class="doodle-line"
+                    d="M58,62
+                    C50,60 44,58 36,54
+                    M58,62
+                    C66,60 74,58 84,55" />
+
+                <!-- Legs -->
+                <path class="doodle-line"
+                    d="M56,96
+                    C50,104 44,110 38,114
+                    M56,96
+                    C62,104 70,110 78,114" />
+
+                <!-- Tiny “spark” accent (optional) -->
+                <!--<path class="doodle-stitch"
+                    d="M95,20 L104,18 M97,26 L106,28 M92,26 L88,34" />-->
+            </svg>
+
+                <!-- little “corner stitch” marks -->
+               <!-- <path class="doodle-stitch"
+                d="M18,20 L30,26 M22,14 L34,20 M14,26 L26,32" />-->
+            </svg>
+
+            <div class="critter-tag">healthcare<br>is a<br>human right.<br>✮ ⋆ ˚｡𖦹 ⋆｡°✩</div>
+
+            </div>
+
+            <!-- Full-width masthead ABOVE the columns -->
+            <div class="top-masthead" aria-label="Site masthead">
+                <span class="masthead-name">Yeshi</span>
+                <span class="masthead-slash">/</span>
+                <span class="masthead-name">Dolma</span>
+            </div>
+
+
+            <!-- Left Sidebar - Table of Contents -->
+            <div class="left-sidebar">
+                <div class="toc-section">
+                    <h2 class="sidebar-title">Contents</h2>
+                    
+                    <a href="#welcome" class="toc-entry welcome-link" onclick="loadContent('welcome'); return false;">
+                        ← Welcome page
+                    </a>
+
+                    <a href="#about" class="toc-entry" onclick="loadContent('about'); return false;">
+                        About
+                    </a>
+                    
+                    <a href="#work" class="toc-entry" onclick="loadContent('work'); return false;">
+                        Selected Works
+                    </a>
+                    
+                    <a href="#projects" class="toc-entry" onclick="loadContent('projects'); return false;">
+                        Projects & Experiments
+                    </a>
+                    
+                    <a href="#writing" class="toc-entry" onclick="loadContent('writing'); return false;">
+                        Writings
+                    </a>
+                    
+                    <a href="#skills" class="toc-entry" onclick="loadContent('skills'); return false;">
+                        Skills & Expertise
+                    </a>
+
+                    <a href="#comfort" class="toc-entry" onclick="loadContent('comfort'); return false;">
+                        Comfort Potluck
+                    </a>
+                </div>
+                
+                <div class="ornament">
+                    <img src="images/pixel-art.png" alt="Decorative icon">
+                </div>
+                
+                <div class="toc-section">
+                    <h2 class="sidebar-title">Appendices</h2>
+                    
+                    <a href="#contact" class="toc-entry" onclick="loadContent('contact'); return false;">
+                        Contact
+                    </a>
+                    
+                    <a href="#notes" class="toc-entry" onclick="loadContent('notes'); return false;">
+                        Notes & Acknowledgments
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="main-content" id="content-area">
+                <div class="content-header">
+                    <h1 class="content-title">Welcome</h1>
+                </div>
+                <div class="content-body">
+                    <p> I am driven by the belief that without health security, human potential is unfairly constrained; equitable health must come first so anyone can dream.
+                        <br><br>
+                        My work focuses on applying computational modeling to solve public health challenges, improving outcomes across the cancer care continuum, advancing health equity, and dismantling systemic barriers to better health for underserved populations.</p>
+                    
+                    <div class="ornament">
+                        <img src="images/pixel-art.png" alt="Decorative icon">
+                    </div>
+                    
+                    <p style="font-style: italic; text-align: center; margin-top: 40px;">let's figure it out together.</p>
+                </div>
+                <div class="page-number">i</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Jumbled text effect - lowercase text
+        const text = "let's figure it out together";
+        const jumbledTextEl = document.getElementById('jumbledText');
+        
+        // Create characters
+        text.split('').forEach((char, i) => {
+            const span = document.createElement('span');
+            if (char === ' ') {
+                span.className = 'space';
+            } else {
+                span.className = 'char';
+            }
+            span.textContent = char;
+            jumbledTextEl.appendChild(span);
+        });
+        
+        // Unjumble on scroll or hover
+        let hasUnjumbled = false;
+        let isAnimating = false;
+        let animationComplete = false;
+        let animationTimeout = null;
+        
+        function unjumble() {
+            if (!hasUnjumbled) {
+                jumbledTextEl.classList.remove('jumbled');
+                hasUnjumbled = true;
+                isAnimating = true;
+                
+                // Mark animation as complete after 3 seconds
+                setTimeout(() => {
+                    isAnimating = false;
+                    animationComplete = true;
+                }, 1000);
+                
+                // Auto-open after 3 seconds animation + 20 seconds wait = 23 seconds total
+                animationTimeout = setTimeout(() => {
+                    openBook();
+                }, 5000);
+            }
+        }
+        
+        function openBook() {
+            if (animationTimeout) {
+                clearTimeout(animationTimeout);
+            }
+            isAnimating = false;
+            animationComplete = false;
+            document.getElementById('cover').style.transition = 'opacity 0.5s ease';
+            document.getElementById('cover').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('cover').style.display = 'none';
+                document.getElementById('main-page').classList.add('active');
+                window.scrollTo({ top: 0 });
+            }, 500);
+        }
+        
+        // Skip animation on click or scroll ONLY after animation completes
+        document.addEventListener('click', () => {
+            if (animationComplete) {
+                openBook();
+            }
+        });
+        
+        jumbledTextEl.addEventListener('mouseenter', unjumble);
+        
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (!hasUnjumbled && window.scrollY > 50) {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(unjumble, 100);
+            } else if (animationComplete) {
+                openBook();
+            }
+        });
+        
+        function goToWelcome() {
+            const cover = document.getElementById('cover');
+            const mainPage = document.getElementById('main-page');
+
+            // Hide main content
+            mainPage.classList.remove('active');
+
+            // Show cover again
+            cover.style.display = 'flex';
+            cover.style.opacity = '1';
+
+            // Reset jumbled text state
+            hasUnjumbled = false;
+            animationComplete = false;
+            isAnimating = false;
+
+            // Re-jumble text
+            jumbledTextEl.classList.add('jumbled');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        
+
+        // Content loading
+        const contentData = {
+            welcome: {
+            title: 'Welcome',
+            subtitle: '',
+            page: 'i',
+            content: `
+                <p class="welcome-intro">
+                I am driven by the belief that without health security, human potential is unfairly constrained; equitable health must come first so anyone can dream.
+                <br><br>
+                My work focuses on applying computational modeling to solve public health challenges, 
+                improving outcomes across the cancer care continuum, advancing health equity, and dismantling systemic barriers to better health for
+                underserved populations.
+                </p>
+
+            `
+            },
+
+            about: {
+                title: 'About',
+                subtitle: 'Background & Philosophy',
+                page: 'i',
+                content: `
+                    <p>I am a [your profession] based in [your location], working at the intersection of [your interests].</p>
+                    
+                    <p>My work explores [your focus areas], with a particular interest in [specific topics]. Through [your medium/approach], I seek to [your mission or goal].</p>
+                    
+                    <h3>Background</h3>
+                    <p>I studied [your education] at [institution] and have since worked with [types of clients/companies]. My practice encompasses [your areas of work].</p>
+                    
+                    <h3>Philosophy</h3>
+                    <p>[Your approach to work, what drives you, your values and principles.]</p>
+                `
+            },
+            
+            work: {
+                title: 'Selected Works',
+                subtitle: 'Featured Projects',
+                page: '1',
+                content: `
+                    <h2>Project One</h2>
+                    <p><em>Role: [Your Role] • Year: [Year]</em></p>
+                    <p>[Description of the project, your contribution, and outcomes.]</p>
+                    
+                    <h2>Project Two</h2>
+                    <p><em>Role: [Your Role] • Year: [Year]</em></p>
+                    <p>[Description of the project, your contribution, and outcomes.]</p>
+                    
+                    <h2>Project Three</h2>
+                    <p><em>Role: [Your Role] • Year: [Year]</em></p>
+                    <p>[Description of the project, your contribution, and outcomes.]</p>
+                `
+            },
+            projects: {
+                title: 'Projects & Experiments',
+                subtitle: 'Ongoing Explorations',
+                page: '23',
+                content: `
+                    <p>A collection of ongoing explorations and experimental work.</p>
+                    
+                    <h3>[Project Name]</h3>
+                    <p>[Brief description of your experimental or side project.]</p>
+                    
+                    <h3>[Project Name]</h3>
+                    <p>[Brief description of your experimental or side project.]</p>
+                    
+                    <h3>[Project Name]</h3>
+                    <p>[Brief description of your experimental or side project.]</p>
+                `
+            },
+            writing: {
+                title: 'Writings',
+                subtitle: 'Essays & Articles',
+                page: '47',
+                content: `
+                    <h3>[Article Title]</h3>
+                    <p><em>[Date] • [Publication if applicable]</em></p>
+                    <p>[Brief excerpt or description of the article.]</p>
+                    
+                    <h3>[Article Title]</h3>
+                    <p><em>[Date] • [Publication if applicable]</em></p>
+                    <p>[Brief excerpt or description of the article.]</p>
+                    
+                    <h3>[Article Title]</h3>
+                    <p><em>[Date] • [Publication if applicable]</em></p>
+                    <p>[Brief excerpt or description of the article.]</p>
+                `
+            },
+            skills: {
+                title: 'Skills & Expertise',
+                subtitle: 'Capabilities',
+                page: '68',
+                content: `
+                    <h3>Technical Skills</h3>
+                    <p>[List your technical skills and proficiencies]</p>
+                    
+                    <h3>Tools & Technologies</h3>
+                    <p>[Software, platforms, and tools you work with]</p>
+                    
+                    <h3>Languages</h3>
+                    <p>[Programming languages, spoken languages, etc.]</p>
+                    
+                    <h3>Methodologies</h3>
+                    <p>[Your approach to work, frameworks you use]</p>
+                `
+            },
+
+            comfort: {
+                title: 'Comfort Potluck',
+                subtitle: 'A Collection of Comforts',
+                page: '68',
+                content: `
+                    <div class="container">
+                        <div class="header-section">
+                            <div class="text-center">
+                                <p class="description">
+                                    I put together a list of little things my friends find comforting. Maybe it'll jog your memory or give you a new idea. Either way, it makes me happy to look at. ♡
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="bag-section">
+                            <div class="kindness-bag">
+                                <div class="bag-container">
+                                    <button id="pouch-button" class="pouch-button">
+                                        <div class="pouch">
+                                            <div class="pouch-body">
+                                                <div class="pouch-pixels">
+                                                    <div class="pouch-bottom-dark"></div>
+                                                    <div class="pouch-bottom-dark-2"></div>
+                                                    <div class="pouch-highlight"></div>
+                                                    <div class="pouch-shadow"></div>
+                                                </div>
+                                            </div>
+                                            <div class="pouch-top"></div>
+                                            <div class="pouch-string-horizontal"></div>
+                                            <div class="pouch-string-left"></div>
+                                            <div class="pouch-string-right"></div>
+                                        </div>
+                                    </button>
+
+                                    <div id="chit" class="chit hidden">
+                                        <div class="chit-paper">
+                                            <div class="corner-pixel top-left"></div>
+                                            <div class="corner-pixel top-right"></div>
+                                            <div class="corner-pixel bottom-left"></div>
+                                            <div class="corner-pixel bottom-right"></div>
+                                            <div class="corner-fold"></div>
+                                            <div class="border-pattern top-1"></div>
+                                            <div class="border-pattern top-2"></div>
+                                            <div class="border-pattern bottom-1"></div>
+                                            <div class="border-pattern bottom-2"></div>
+                                            <div class="chit-content">
+                                                <div class="quote-left">"</div>
+                                                <p id="chit-text" class="chit-text"></p>
+                                                <div class="quote-right">"</div>
+                                            </div>
+                                            <div class="pixel-texture"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="instruction-text">Click the pouch to draw a chit</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+
+            contact: {
+                title: 'Contact',
+                subtitle: 'Get in Touch',
+                page: '89',
+                content: `
+                    <p>I'm always interested in hearing about new projects and opportunities.</p>
+                    
+                    <p><strong>Email:</strong> your.email@example.com</p>
+                    <p><strong>Location:</strong> [Your City, Country]</p>
+                    <p><strong>Website:</strong> yourwebsite.com</p>
+                    
+                    <p style="margin-top: 30px;"><strong>Connect:</strong></p>
+                    <p>LinkedIn • Twitter • GitHub • Instagram</p>
+                `
+            },
+            notes: {
+                title: 'Notes & Acknowledgments',
+                subtitle: 'Credits',
+                page: '92',
+                content: `
+                    <p>This portfolio was created with inspiration from classic book design and the rich tradition of printed matter.</p>
+                    
+                    <p>Special thanks to [mentors, collaborators, or inspirations].</p>
+                    
+                    <p><em>Last updated: [Date]</em></p>
+                `
+            }
+        };
+        
+        function loadContent(section) {
+            const data = contentData[section];
+            const contentArea = document.getElementById('content-area');
+            
+            contentArea.innerHTML = `
+                <div class="content-header">
+                    <h1 class="content-title">${data.title}</h1>
+                    <p class="content-subtitle">${data.subtitle}</p>
+                </div>
+
+                <div class="content-body">
+                ${data.content}
+                </div>
+
+                <div class="page-number">${data.page}</div>
+            `;
+
+            if (section === 'comfort') initPouchLogic();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initPouchLogic() {
+            // 1. Define the items
+            const comfortThings = [
+                "A warm cup of tea on a rainy day", "Soft blankets fresh from the dryer",
+                "The smell of freshly baked cookies", "Rewatching your favorite comfort show",
+                "A long, warm shower", "Listening to rain sounds",
+                "Lighting a scented candle", "Writing in a journal",
+                "Taking a walk in nature", "Calling a friend just to chat",
+                "Reading a book you've read before", "Wearing your coziest pajamas",
+                "Making your favorite comfort food", "Listening to nostalgic music",
+                "Looking at old photos", "Doing a face mask or self-care routine",
+                "Cuddling with a pet", "Watching the sunset",
+                "Organizing your space", "Taking a nap in the afternoon"
+            ];
+
+            // 2. Find the elements inside the "Comfort" page
+            const pouchButton = document.getElementById('pouch-button');
+            const chit = document.getElementById('chit');
+            const chitText = document.getElementById('chit-text');
+
+            // 3. The logic functions
+            if (pouchButton && chit && chitText) {
+                pouchButton.onclick = function() {
+                    pouchButton.classList.add('shake');
+                    
+                    setTimeout(() => {
+                        const randomPhrase = comfortThings[Math.floor(Math.random() * comfortThings.length)];
+                        chitText.textContent = randomPhrase;
+                        chit.classList.remove('hidden');
+                        chit.classList.add('visible');
+                        pouchButton.classList.remove('shake');
+                    }, 400);
+                };
+
+                chit.onclick = function() {
+                    chit.classList.remove('visible');
+                    setTimeout(() => {
+                        chit.classList.add('hidden');
+                    }, 600);
+                };
+            }
+        }
+        // --- Corner critter that reacts to scroll (main page only) ---
+        const mainPageEl = document.getElementById('main-page');
+        const critter = document.getElementById('cornerCritter');
+
+        let critterRaf = null;
+
+        function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+        function getScrollTop(){
+        // If you later make #main-page scrollable, this will start working automatically.
+        const pageIsScrollable = mainPageEl && (mainPageEl.scrollHeight > mainPageEl.clientHeight);
+        return pageIsScrollable ? mainPageEl.scrollTop : window.scrollY;
+        }
+
+        function updateCritter() {
+        critterRaf = null;
+        if (!mainPageEl || !critter) return;
+
+        // Only show when main page is active (book opened)
+        const isActive = mainPageEl.classList.contains('active');
+        critter.style.opacity = isActive ? '1' : '0';
+        if (!isActive) return;
+
+        const s = getScrollTop();
+
+        // Map early scroll to progress 0..1
+        const t = clamp(s / 260, 0, 1);
+
+        // Funky motion
+        const wiggle = Math.sin(s * 0.06) * 14;     // degrees
+        const bobY   = Math.cos(s * 0.045) * 9;     // px
+        const bobX   = Math.sin(s * 0.05) * 7;      // px
+        const scale  = 1 + Math.sin(s * 0.08) * 0.06;
+
+        // Gentle drift inward as you scroll
+        const driftY = t * 14;
+        const driftX = t * -10;
+
+        critter.style.transform =
+            `translate3d(${bobX + driftX}px, ${bobY + driftY}px, 0) rotate(${wiggle}deg) scale(${scale})`;
+
+        // Draw the human doodle progressively with scroll (all strokes)
+        const lines = critter.querySelectorAll('.doodle-line');
+        lines.forEach((path) => {
+            const total = path.getTotalLength();
+
+            // Initialize once
+            if (!path.dataset.inited) {
+            path.style.strokeDasharray = String(total);
+            path.style.strokeDashoffset = String(total);
+            path.dataset.inited = "1";
+            }
+
+            path.style.strokeDashoffset = String(total * (1 - t));
+        });
+        }
+
+        function requestCritterUpdate() {
+        if (critterRaf) return;
+        critterRaf = requestAnimationFrame(updateCritter);
+        }
+
+        // Listen to both (window + potential main-page scroll)
+        window.addEventListener('scroll', requestCritterUpdate, { passive: true });
+        if (mainPageEl) mainPageEl.addEventListener('scroll', requestCritterUpdate, { passive: true });
+        window.addEventListener('resize', requestCritterUpdate);
+
+        // Ensure it appears right when you open the book
+        const _openBook = openBook;
+        openBook = function () {
+        _openBook();
+        requestCritterUpdate();
+        };
+
+        // Also update when content changes
+        const _loadContent = loadContent;
+        loadContent = function (section) {
+        _loadContent(section);
+        requestCritterUpdate();
+        };
+
+        // initial paint
+        requestCritterUpdate();
+
+    </script>
+</body>
+</html>
