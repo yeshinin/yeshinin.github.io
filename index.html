@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yeshi Dolma</title>
+  <meta name="description" content="Yeshi Dolma: building With You, a voice-first companion for patients and caregivers." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="books.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main>
+
+    <!-- ============ HOME: FLIP CARD ============ -->
+    <section class="view view-home" id="home">
+      <div class="tray">
+        <div class="card" id="card" role="button" tabindex="0" aria-pressed="false" aria-label="Flip card">
+          <div class="card-inner">
+            <div class="face front">
+              <img class="photo" src="images/yeshi.jpg" alt="Yeshi Dolma" width="72" height="72" />
+              <h1>Yeshi Dolma</h1>
+              <p>building With You<br />applied ML for public health</p>
+            </div>
+            <div class="face back" inert>
+              <h2>say hello</h2>
+              <a href="mailto:yeshidpn@gmail.com">yeshidpn@gmail.com</a>
+              <a href="https://www.linkedin.com/in/dolmayeshi/" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STARTUP ============ -->
+    <section class="view" id="startup">
+      <div class="panel panel-feature">
+        <p class="label">My startup</p>
+        <h2>With You</h2>
+        <p class="big">Understand your care. Navigate daily life. Recover with support.</p>
+        <p>A voice-first companion for patients and caregivers, from hospital admission through recovery, until you reach your own new normal.</p>
+        <a class="pill" href="https://yeshinin.github.io/with-you/" target="_blank" rel="noopener">Visit With You</a>
+      </div>
+    </section>
+
+    <!-- ============ WORK ============ -->
+    <section class="view" id="work">
+      <div class="panel panel-mid">
+        <p class="label">Selected work</p>
+        <h2>Projects</h2>
+        <article class="project">
+          <p class="kicker">Agentic AI for Health</p>
+          <h3>OTCSafe: AI for Self-Medication Risk Detection</h3>
+          <p class="byline">by Yeshi Dolma</p>
+          <p>A conversational AI agent that detects harmful over-the-counter self-medication behaviors and explains associated risks in plain language.</p>
+          <details>
+            <summary>Read more</summary>
+            <p>Type anything — “I take NyQuil and Tylenol every night with wine” — and the agent identifies dangerous drug combinations, duplicate ingredient exposure, dose limit exceedances, and drug-supplement interactions. Every finding is cited to its source.</p>
+            <ul>
+              <li>Resolves brand names to active ingredients (NyQuil → acetaminophen + dextromethorphan + ...)</li>
+              <li>Detects pairwise interactions via OpenFDA label search</li>
+              <li>Reasons pharmacologically using Claude to catch interactions databases miss — serotonin syndrome, CYP450 enzyme interactions, stimulant stacking, CNS depression combinations, duplicate therapeutic classes</li>
+              <li>Accumulates ingredient doses across multiple products and flags exceedances of safe daily limits</li>
+              <li>Writes plain-language risk reports with severity ratings and actionable advice</li>
+              <li>Cites every finding to a named source with a URL</li>
+            </ul>
+            <p>Not a substitute for professional medical advice.</p>
+            <a class="pill" href="https://github.com/yeshinin/OTC-self-medication-agent/tree/main" target="_blank" rel="noopener">View the code</a>
+          </details>
+        </article>
+        <article class="project">
+          <p class="kicker">Computational Epidemiology</p>
+          <h3>COVID-19 Misinformation &amp; Behavioral Signals</h3>
+          <p class="byline">by Yeshi Dolma</p>
+          <p>Mapping Misinformation Search Trends Against COVID-19 Case Dynamics (King County &amp; Washington State)</p>
+          <details>
+            <summary>Read more</summary>
+            <p>This project investigates how misinformation evolves during a public health crisis—and more importantly, what actually drives its spread. Rather than treating misinformation as a static content problem, I approached it as a dynamic behavioral signal shaped by policy, communication, and institutional trust.</p>
+            <ul>
+              <li><b>Causal Analysis Pipeline:</b> Modeled Google Trends as a proxy for misinformation engagement (e.g., vaccine denial, institutional skepticism) and correlated composite indices with COVID-19 trajectories in Washington.</li>
+              <li><b>Signal Processing & Contextualization:</b> Built workflows for smoothing, normalization, and policy-event annotation to isolate drivers of misinformation surges.</li>
+              <li><b>Mechanism Identification:</b> Revealed that misinformation engagement was primarily driven by policy and communication vacuums (e.g., CDC mask guidance shifts, vaccine rollout gaps) and guidance reversals, while remaining largely decoupled from disease severity; institutional skepticism persisted due to cumulative credibility erosion.</li>
+              <li><b>Policy-Relevant Insights:</b> Research indicated that interventions require targeting institutional communication and behavioral strategies over traditional models focused solely on addressing disease-based information gaps.</li>
+              <li><b>Ongoing Work:</b> Extending with NLP (topic modeling, sentiment analysis) to track narrative evolution and cross-state variation.</li>
+            </ul>
+            <figure><img src="images/projects/misinfo.png" alt="Misinformation search trends compared with COVID-19 cases" loading="lazy" /></figure>
+          </details>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ BOOKS ============ -->
+    <section class="view" id="books">
+      <div class="panel panel-wide">
+        <p class="label">Books I have read</p>
+        <h2>Bookshelf</h2>
+        <p class="updated">Last updated <time id="books-updated"></time></p>
+        <div id="library"></div>
+        <a class="pill" href="https://www.goodreads.com/user/show/18417924-yeshi-dolma" target="_blank" rel="noopener">All my books on Goodreads</a>
+      </div>
+    </section>
+
+    <!-- ============ SKETCHES ============ -->
+    <section class="view" id="sketches">
+      <div class="panel panel-wide">
+        <p class="label">Sketches</p>
+        <h2>Sketchbook</h2>
+        <div class="sketches">
+          <a href="https://www.instagram.com/p/DYmjnLTE4zk/" target="_blank" rel="noopener"><img src="images/sketches/DYmjnLTE4zk.jpg" alt="Sketch by Yeshi Dolma, posted May 21, 2026" loading="lazy" /></a>
+          <a href="https://www.instagram.com/p/DWsf6kIFdu1/" target="_blank" rel="noopener"><img src="images/sketches/DWsf6kIFdu1.jpg" alt="Sketch by Yeshi Dolma, posted April 3, 2026" loading="lazy" /></a>
+          <a href="https://www.instagram.com/p/DVp2aRQlX_8/" target="_blank" rel="noopener"><img src="images/sketches/DVp2aRQlX_8.jpg" alt="Sketch by Yeshi Dolma, posted March 8, 2026" loading="lazy" /></a>
+          <a href="https://www.instagram.com/p/DVKhcaYkU1n/" target="_blank" rel="noopener"><img src="images/sketches/DVKhcaYkU1n.jpg" alt="Sketch by Yeshi Dolma, posted February 24, 2026" loading="lazy" /></a>
+          <a href="https://www.instagram.com/p/DU2TQNxEXC3/" target="_blank" rel="noopener"><img src="images/sketches/DU2TQNxEXC3.jpg" alt="Sketch by Yeshi Dolma, posted February 16, 2026" loading="lazy" /></a>
+          <a href="https://www.instagram.com/p/DUm7u6MkRI8/" target="_blank" rel="noopener"><img src="images/sketches/DUm7u6MkRI8.jpg" alt="Sketch by Yeshi Dolma, posted February 10, 2026" loading="lazy" /></a>
+          <a href="https://www.instagram.com/p/DTZfKXuEQEP/" target="_blank" rel="noopener"><img src="images/sketches/DTZfKXuEQEP.jpg" alt="Sketch by Yeshi Dolma, posted January 11, 2026" loading="lazy" /></a>
+        </div>
+        <a class="pill" href="https://www.instagram.com/yeshi.draws/" target="_blank" rel="noopener">More on Instagram</a>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="view" id="about">
+      <div class="panel panel-mid">
+        <p class="label">About</p>
+        <h2>healthcare is a human right.</h2>
+        <p class="big">I am driven by the belief that without health security, human potential is unfairly constrained; equitable health must come first so anyone can dream.</p>
+        <p>As an Applied ML Scientist with over nine years of experience building large-scale AI systems, my work sits at the intersection of machine learning, AI and improving public health outcomes. Currently focused on advanced predictive modeling, generative AI, and causal inference to identify mechanisms driving public health patterns and generate equity-centered, policy-relevant evidence and decision support in resource-constrained settings.</p>
+        <p><em>Interests: Predictive and counterfactual modeling; generative AI; resource optimization; spatiotemporal systems; behavioral health analytics; global health; women’s health; cancer care continuum; bias-aware causal inference; and scalable AI for low-resource public health systems.</em></p>
+        <p>let’s work to figure out and improve health outcomes together.</p>
+      </div>
+    </section>
+
+    <!-- ============ CV ============ -->
+    <section class="view" id="cv">
+      <div class="panel">
+        <p class="label">Curriculum vitae</p>
+        <h2>CV</h2>
+        <p class="updated">Last updated <time datetime="2026-03-19">March 19, 2026</time></p>
+        <!-- PLACEHOLDER: link the PDF here once there is a copy without the phone number -->
+        <span class="pill pill-off">PDF coming soon</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ DOCK ============ -->
+  <nav class="dock" aria-label="Main">
+    <a class="key" href="#startup" data-key="startup"><i></i>Startup</a>
+    <a class="key" href="#work" data-key="work"><i></i>Work</a>
+    <a class="key" href="#books" data-key="books"><i></i>Books</a>
+    <a class="key" href="#sketches" data-key="sketches"><i></i>Sketches</a>
+    <a class="key" href="#about" data-key="about"><i></i>About</a>
+    <a class="key" href="#cv" data-key="cv"><i></i>CV</a>
+    <a class="round" href="https://www.linkedin.com/in/dolmayeshi/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+  </nav>
+</body>
+</html>
