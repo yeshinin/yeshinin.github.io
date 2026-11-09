@@ -67,8 +67,72 @@ const observer = new IntersectionObserver(
 );
 document.querySelectorAll(".view").forEach((view) => observer.observe(view));
 
-// Bookshelves: READ holds every book; each Goodreads shelf opens the same way.
-// Books are drawn as spines, and clicking one shows its details.
+// Folder browser, shared by Books and Sketches. A node has a name and either
+// children (more folders), books (a list) or images (a gallery).
+const el = (tag, props = {}, ...children) => {
+  const node = Object.assign(document.createElement(tag), props);
+  node.append(...children);
+  return node;
+};
+
+const sizeOf = (node) =>
+  node.books ? `${node.books.length} ${node.books.length === 1 ? "book" : "books"}`
+  : node.images ? `${node.images.length} ${node.images.length === 1 ? "sketch" : "sketches"}`
+  : `${node.children.length} folders`;
+
+const browseFolders = (mount, rootName, topLevel) => {
+  const section = mount.closest(".view");
+  const open = (path, scroll = true) => {
+    const node = path[path.length - 1];
+    const contents = node.children ? folderView(node, path)
+      : node.books ? bookView(node)
+      : galleryView(node);
+    const crumbs = path.length === 1 ? [] : [el("nav", { className: "crumbs", ariaLabel: "Folder path" },
+      ...path.flatMap((step, i) => {
+        const last = i === path.length - 1;
+        const item = last
+          ? el("strong", { textContent: step.name })
+          : el("button", { type: "button", textContent: step.name, onclick: () => open(path.slice(0, i + 1)) });
+        return last ? [item] : [item, " / "];
+      }))];
+    mount.replaceChildren(...crumbs, contents);
+    if (scroll) section.scrollIntoView();
+  };
+
+  const folderView = (node, path) =>
+    el("div", { className: node.list ? "folder-rows" : "folders" }, ...node.children.map((child) => {
+      const go = () => open([...path, child]);
+      return node.list
+        ? el("button", { className: "row", type: "button", onclick: go }, child.name, el("small", { textContent: sizeOf(child) }))
+        : el("button", { className: "folder", type: "button", onclick: go }, child.name, el("small", { textContent: sizeOf(child) }));
+    }));
+
+  const bookView = (node) =>
+    el("ul", { className: "book-list" }, ...node.books.map((book) =>
+      el("li", {},
+        el("b", { textContent: book.title }),
+        el("span", { textContent: `, ${book.author}` }),
+        ...(book.awards.length ? [" ", el("em", { textContent: book.awards.join(", ") })] : []))));
+
+  const galleryView = (node) => {
+    const strip = el("div", { className: "gallery", tabIndex: 0, ariaLabel: `${node.name} sketches` },
+      ...node.images.map((image) =>
+        el("figure", {},
+          el("img", { src: image.src, alt: `${image.caption}, sketch by Yeshi Dolma` }),
+          el("figcaption", {}, image.caption,
+            el("a", { href: image.link, target: "_blank", rel: "noopener", textContent: "Instagram" })))));
+    if (node.images.length < 2) return strip;
+    const step = (dir) => strip.scrollBy({ left: dir * strip.firstChild.offsetWidth, behavior: "smooth" });
+    return el("div", {}, strip,
+      el("div", { className: "gallery-nav" },
+        el("button", { type: "button", textContent: "←", ariaLabel: "Previous sketch", onclick: () => step(-1) }),
+        el("button", { type: "button", textContent: "→", ariaLabel: "Next sketch", onclick: () => step(1) })));
+  };
+
+  open([{ name: rootName, children: topLevel }], false);
+};
+
+// Books: READ holds every book, then Goodreads shelves grouped into folders
 const library = document.getElementById("library");
 
 if (library && window.LIBRARY) {
@@ -77,116 +141,48 @@ if (library && window.LIBRARY) {
   stamp.dateTime = updated;
   stamp.textContent = new Date(`${updated}T12:00:00`).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
-  const el = (tag, props = {}, ...children) => {
-    const node = Object.assign(document.createElement(tag), props);
-    node.append(...children);
-    return node;
+  const AWARDS = {
+    "nobel-prize-winning-authors": "Nobel laureate",
+    "pulitzer-prize": "Pulitzer Prize",
+    "booker-prize-winners": "Booker Prize",
+    "booker-short-long-list": "Booker shortlist or longlist",
   };
+  const entries = books.map((b) => ({
+    title: b.t.replace(/\s*\(.*\)\s*$/, ""),
+    author: b.a,
+    shelves: b.s,
+    awards: b.s.filter((s) => AWARDS[s]).map((s) => AWARDS[s]),
+  }));
+
   const label = (shelf) => {
     const text = shelf.replace(/-/g, " ");
     return text[0].toUpperCase() + text.slice(1);
   };
-
-  const counts = {};
-  books.forEach((b) => b.s.forEach((s) => (counts[s] = (counts[s] || 0) + 1)));
   const groupOf = (s) =>
     /^\d+s$/.test(s) ? "Decades"
     : s.startsWith("set-in-") ? "Places"
     : /-(literature|authors)$/.test(s) ? "Literatures"
     : s.startsWith("explores-") ? "Themes"
     : "My shelves";
-  const groups = ["My shelves", "Themes", "Literatures", "Places", "Decades"];
 
-  const SPINE_COLORS = ["#dcd6e8", "#d8dde6", "#e8dde3", "#d9e3de", "#e6e2d6", "#cfcfd6", "#c9c3da", "#bcc6d6", "#efe9f3", "#b9b4c4"];
-  const hash = (text) => [...text].reduce((n, ch) => (n * 31 + ch.charCodeAt(0)) >>> 0, 7);
-  const spineTitle = (title) => title.replace(/\s*\(.*\)\s*$/, "").split(/:\s/)[0];
-
-  let card = null;
-  const closeCard = () => {
-    if (card) card.remove();
-    card = null;
-    library.querySelectorAll(".spine.on").forEach((s) => s.classList.remove("on"));
+  const shelves = [...new Set(entries.flatMap((b) => b.shelves))].map((s) => ({
+    id: s,
+    name: label(s),
+    books: entries.filter((b) => b.shelves.includes(s)),
+  }));
+  const group = (name) => {
+    const inGroup = shelves.filter((s) => groupOf(s.id) === name);
+    inGroup.sort(name === "Decades"
+      ? (a, b) => parseInt(b.id, 10) - parseInt(a.id, 10)
+      : (a, b) => b.books.length - a.books.length || a.name.localeCompare(b.name));
+    return { name, children: inGroup };
   };
 
-  const showBook = (book, spine) => {
-    closeCard();
-    spine.classList.add("on");
-    const facts = [];
-    if (book.r) facts.push(`${book.r}/5`);
-    if (book.d) {
-      const [y, m] = book.d.split("-").map(Number);
-      facts.push(`Read ${new Date(y, m - 1).toLocaleDateString("en-US", { month: "short", year: "numeric" })}`);
-    }
-    if (book.p) facts.push(`${book.p} pages`);
-    if (book.y) facts.push(`Published ${book.y}`);
-    card = el("aside", { className: "book-card" },
-      el("button", { className: "book-close", type: "button", textContent: "×", ariaLabel: "Close", onclick: closeCard }),
-      el("h3", { textContent: book.t }),
-      el("p", { textContent: book.a }),
-      el("p", { textContent: facts.join(" · ") }),
-      el("div", { className: "chips" }, ...book.s.map((s) =>
-        el("button", { className: "chip", type: "button", textContent: label(s), onclick: () => openShelf(s) }))),
-      el("a", { href: `https://www.goodreads.com/book/show/${book.i}`, target: "_blank", rel: "noopener", textContent: "See on Goodreads" }));
-    document.body.append(card);
-  };
-
-  const drawSpines = (holder, list) => {
-    holder.replaceChildren(...list.map((book) => {
-      const h = hash(book.i);
-      const spine = el("button", { className: "spine", type: "button", title: `${book.t}, ${book.a}`, ariaLabel: `${book.t} by ${book.a}` },
-        el("span", { textContent: spineTitle(book.t) }));
-      spine.style.setProperty("--w", `${26 + Math.round((Math.min(book.p || 300, 800) / 800) * 20)}px`);
-      spine.style.setProperty("--h", `${148 + (h % 40)}px`);
-      spine.style.setProperty("--c", SPINE_COLORS[h % SPINE_COLORS.length]);
-      spine.onclick = () => showBook(book, spine);
-      return spine;
-    }));
-  };
-
-  const openShelf = (shelf) => {
-    closeCard();
-    const shelfBooks = shelf ? books.filter((b) => b.s.includes(shelf)) : books;
-    const holder = el("div", { className: "spines" });
-    const count = el("span", { className: "shelf-count" });
-    const search = el("input", { className: "shelf-search", type: "search", placeholder: "Search this shelf", ariaLabel: "Search this shelf" });
-    const draw = () => {
-      const q = search.value.trim().toLowerCase();
-      const list = shelfBooks.filter((b) => !q || `${b.t} ${b.a}`.toLowerCase().includes(q));
-      count.textContent = `${list.length} ${list.length === 1 ? "book" : "books"}`;
-      closeCard();
-      drawSpines(holder, list);
-    };
-    search.oninput = draw;
-    library.replaceChildren(
-      el("div", { className: "shelf-head" },
-        el("button", { className: "shelf-back", type: "button", textContent: "← All shelves", onclick: showWall }),
-        el("span", { className: "shelf-title", textContent: shelf ? label(shelf) : "READ" }),
-        count,
-        search),
-      holder);
-    draw();
-    document.getElementById("books").scrollIntoView();
-  };
-
-  const showWall = () => {
-    closeCard();
-    library.replaceChildren(
-      el("button", { className: "shelf-read", type: "button", onclick: () => openShelf(null) },
-        "READ", el("span", { textContent: `all ${books.length} books` })),
-      ...groups.map((group) => {
-        const shelves = Object.keys(counts).filter((s) => groupOf(s) === group);
-        shelves.sort(group === "Decades"
-          ? (a, b) => parseInt(b, 10) - parseInt(a, 10)
-          : (a, b) => counts[b] - counts[a] || a.localeCompare(b));
-        return el("div", { className: "shelf-group" },
-          el("h3", { textContent: group }),
-          el("div", { className: "shelf-list" }, ...shelves.map((s) =>
-            el("button", { className: "shelf-btn", type: "button", onclick: () => openShelf(s) }, label(s), el("small", { textContent: counts[s] })))));
-      }));
-  };
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeCard();
-  });
-  showWall();
+  browseFolders(library, "Books", [
+    { name: "READ", books: entries },
+    ...["My shelves", "Themes", "Literatures", "Places", "Decades"].map(group),
+  ]);
 }
+
+const sketchFiles = document.getElementById("sketch-files");
+if (sketchFiles && window.SKETCHES) browseFolders(sketchFiles, "Sketches", window.SKETCHES);

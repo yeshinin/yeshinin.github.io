@@ -94,121 +94,65 @@ main { padding-bottom: var(--dock); }
 .panel-mid { width: min(760px, 100%); }
 .panel-wide { width: min(1040px, 100%); }
 
-/* Projects */
-.project { padding: 22px 0; border-top: 1px solid var(--line); }
-.project h3 { margin: 2px 0 2px; font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 1.2; }
-.panel .kicker { margin: 0; font-size: 13px; color: var(--muted); }
-.panel .byline { margin: 0 0 10px; font-size: 14px; color: var(--muted); }
-.project summary { cursor: pointer; font-size: 14px; font-weight: 500; }
-.project details[open] summary { margin-bottom: 12px; }
-.project ul { margin: 0 0 16px; padding-left: 20px; color: var(--ink-2); font-size: 15px; }
-.project li { margin: 8px 0; }
-.project figure { margin: 18px 0; }
-.project img { display: block; max-width: 100%; height: auto; border-radius: 12px; }
-.project figcaption { margin-top: 6px; font-size: 13px; color: var(--muted); }
+/* About: one typeface throughout */
+.about, .about h2, .about p, .about .label, .about .big { font-family: var(--serif); }
+.about p { font-size: 18px; line-height: 1.5; }
+.about .big { font-size: 22px; line-height: 1.35; }
+.about .label { font-size: 15px; }
 
-/* Sketches */
-.sketches { columns: 3 220px; column-gap: 12px; margin-bottom: 14px; }
-.sketches a { display: block; margin-bottom: 12px; break-inside: avoid; }
-.sketches img { display: block; width: 100%; height: auto; border-radius: 12px; }
-
-/* Bookshelves */
-.shelf-read {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  width: 100%;
-  margin: 8px 0 22px;
-  padding: 22px 24px;
+/* Folders: used by both Books and Sketches */
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 4px 0 16px; font-size: 14px; color: var(--muted); }
+.crumbs button { padding: 0; border: 0; background: none; font: inherit; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.crumbs strong { font-weight: 500; color: var(--ink); }
+.folders { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 12px; margin: 14px 0 22px; }
+.folder {
+  position: relative;
+  min-height: 92px;
+  padding: 14px 14px 12px;
   border: 1px solid #fff;
-  border-radius: 18px;
-  background: linear-gradient(155deg, #e3e3e5 35%, var(--lilac) 75%, #ececee);
+  border-radius: 4px 12px 12px 12px;
+  background: linear-gradient(160deg, #e6e6e9 40%, var(--lilac));
   box-shadow: var(--raised);
-  font-family: var(--serif);
-  font-size: 34px;
+  font: 500 15px/1.25 var(--sans);
   color: var(--ink);
-  cursor: pointer;
-}
-.shelf-read span { font-family: var(--sans); font-size: 14px; color: var(--ink-2); }
-.shelf-group { margin: 0 0 18px; }
-.panel .shelf-group h3 { margin: 0 0 8px; font-size: 13px; font-weight: 500; color: var(--muted); }
-.shelf-list { display: flex; flex-wrap: wrap; gap: 7px; }
-.shelf-btn, .chip {
-  padding: 7px 12px;
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  border-radius: 10px;
-  background: linear-gradient(#f6f6f7, #ececed);
-  box-shadow: inset 0 1px 0 #fff;
-  font: 500 13px/1.3 var(--sans);
-  color: var(--ink-2);
-  cursor: pointer;
-}
-.shelf-btn small { margin-left: 5px; font-size: 12px; color: var(--muted); }
-.shelf-btn:hover, .chip:hover { color: var(--ink); border-color: var(--led); }
-.shelf-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 10px 0 18px; }
-.shelf-back { padding: 7px 12px; border: 1px solid rgba(0, 0, 0, 0.14); border-radius: 10px; background: #f5f5f6; font: 500 13px var(--sans); color: var(--ink-2); cursor: pointer; }
-.shelf-title { font-family: var(--serif); font-size: 26px; line-height: 1.2; }
-.shelf-count { font-size: 14px; color: var(--muted); }
-.shelf-search { margin-left: auto; width: min(240px, 100%); padding: 8px 12px; border: 1px solid rgba(0, 0, 0, 0.14); border-radius: 10px; background: #fafafa; font: 14px var(--sans); color: var(--ink); }
-
-/* Book spines: every row is 190px tall and sits on a plank drawn by the background */
-.spines {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px 3px;
-  padding: 0 4px;
-  margin-bottom: 26px;
-  background: repeating-linear-gradient(to bottom, transparent 0 190px, #cdcdd2 190px 197px, transparent 197px 206px);
-}
-.spine {
-  width: var(--w);
-  height: var(--h);
-  margin-top: calc(190px - var(--h));
-  padding: 8px 0;
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  border-bottom: 0;
-  border-radius: 4px 4px 0 0;
-  background: var(--c);
-  box-shadow: inset 2px 0 0 rgba(255, 255, 255, 0.6), inset -2px 0 0 rgba(0, 0, 0, 0.05);
-  color: #3b3b42;
+  text-align: left;
   cursor: pointer;
   transition: transform 0.15s ease;
 }
-.spine span {
-  display: block;
-  height: 100%;
-  margin: 0 auto;
-  writing-mode: vertical-rl;
-  font: 400 13px/1 var(--serif);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.spine:hover, .spine.on { transform: translateY(-8px); }
-.spine.on { border-color: var(--led); }
-.shelf-empty { color: var(--muted); }
-
-.book-card {
-  position: fixed;
-  z-index: 6;
-  left: 50%;
-  bottom: calc(var(--dock) + 12px);
-  transform: translateX(-50%);
-  width: min(460px, calc(100% - 24px));
-  max-height: calc(100vh - var(--dock) - 40px);
-  overflow-y: auto;
-  padding: 20px 22px;
+.folder::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -1px;
+  width: 58px;
+  height: 11px;
+  border-radius: 7px 7px 0 0;
+  background: #e2e2e5;
   border: 1px solid #fff;
-  border-radius: 20px;
-  background: linear-gradient(155deg, #f6f6f7 45%, var(--lilac) 90%);
-  box-shadow: 0 24px 50px -18px rgba(0, 0, 0, 0.45);
+  border-bottom: 0;
 }
-.book-card h3 { margin: 0 28px 2px 0; font-family: var(--serif); font-weight: 400; font-size: 23px; line-height: 1.2; }
-.book-card p { margin: 0 0 8px; font-size: 14px; color: var(--ink-2); }
-.book-card .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-.book-card .chip { padding: 4px 9px; font-size: 12px; }
-.book-card a { font-size: 13px; font-weight: 500; }
-.book-close { position: absolute; top: 10px; right: 12px; border: 0; background: none; font-size: 22px; line-height: 1; color: var(--ink-2); cursor: pointer; }
+.folder small { display: block; margin-top: 6px; font-size: 13px; font-weight: 400; color: var(--muted); }
+.folder:hover { transform: translateY(-2px); }
+.folder-rows { display: block; margin: 0 0 22px; }
+.folder-rows .row { display: flex; justify-content: space-between; width: 100%; padding: 13px 2px; border: 0; border-top: 1px solid var(--line); background: none; font: 500 16px var(--sans); color: var(--ink); text-align: left; cursor: pointer; }
+.folder-rows .row small { font-size: 13px; font-weight: 400; color: var(--muted); }
+.folder-rows .row:hover { color: var(--led); }
+
+/* A shelf opened: just the book, author and any award */
+.book-list { list-style: none; margin: 0 0 22px; padding: 0; }
+.book-list li { padding: 10px 0; border-top: 1px solid var(--line); font-size: 16px; line-height: 1.35; }
+.book-list b { font-weight: 500; }
+.book-list span { color: var(--ink-2); }
+.book-list em { color: var(--muted); }
+
+/* Sketch gallery: scroll or use the arrows */
+.gallery { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 10px; scrollbar-width: thin; }
+.gallery figure { flex: 0 0 min(620px, 92%); margin: 0; scroll-snap-align: start; }
+.gallery img { display: block; width: 100%; max-height: 62vh; object-fit: contain; background: #e6e6e8; border-radius: 12px; }
+.gallery figcaption { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; font-size: 14px; color: var(--ink-2); }
+.gallery figcaption a { flex: none; font-size: 13px; color: var(--muted); }
+.gallery-nav { display: flex; gap: 8px; margin: 8px 0 18px; }
+.gallery-nav button { width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 50%; background: #f5f5f6; font-size: 16px; color: var(--ink-2); cursor: pointer; }
 
 .pill {
   display: inline-block;
@@ -280,13 +224,10 @@ main { padding-bottom: var(--dock); }
   .front p { font-size: 13px; }
   .panel { padding: 28px 22px; }
   .panel h2 { font-size: 34px; }
-  .shelf-search { margin-left: 0; width: 100%; }
-  .shelf-read { font-size: 28px; padding: 18px; }
-  .dock { overflow-x: auto; scrollbar-width: none; }
-  .dock::-webkit-scrollbar { display: none; }
-  .key { flex: 0 0 76px; padding: 30px 8px 0; font-size: 13px; }
-  .key i { left: 8px; }
-  .round { position: sticky; right: 0; width: 40px; height: 40px; margin-left: 2px; }
+  .folders { grid-template-columns: 1fr 1fr; }
+  .key { flex: 1 1 0; padding: 30px 6px 0; font-size: 12px; }
+  .key i { left: 6px; }
+  .round { width: 40px; height: 40px; margin-left: 2px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
